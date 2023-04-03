@@ -1,9 +1,8 @@
 const {Telegraf}=require('telegraf');
 const axios=require('axios');
-const express=require('express');
 
 const bot=new Telegraf('6233199859:AAGJeqsKt466GSgQAm2uPACqzItrYqwYmy4');
-const app=express();
+
 
 
 bot.start((ctx)=>{
@@ -49,4 +48,3 @@ bot.on('message',(ctx)=>{
 
 
 bot.launch();
-app.listen(6000)
