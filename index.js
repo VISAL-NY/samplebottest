@@ -43,7 +43,7 @@ bot.on('message',(ctx) => {
         }
     }).then((resp)=>{
         ctx.reply(resp.data.choices[0].message.content); 
-        console.log(resp.data.choices[0].message.content);
+        //console.log(resp.data.choices[0].message.content);
     });
    });
     
