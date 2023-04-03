@@ -1,12 +1,12 @@
-const {Telegraf}=require('telegraf');
-const axios=require('axios');
+const { Telegraf } = require('telegraf');
+const axios = require('axios');
 
-const bot=new Telegraf('6233199859:AAGJeqsKt466GSgQAm2uPACqzItrYqwYmy4');
+const bot = new Telegraf('6233199859:AAGJeqsKt466GSgQAm2uPACqzItrYqwYmy4');
 
 
 
-bot.start((ctx)=>{
-    ctx.reply('Type anything to see wonderful thing');
+bot.start((ctx) => {
+    ctx.reply('Please typing here');
 });
 
 // bot.on('message',(ctx)=>{
@@ -14,37 +14,62 @@ bot.start((ctx)=>{
 //     ctx.replyWithPhoto(`https://cataas.com/cat/says/${ctx.message.text}`);
 // });
 
-bot.on('message',(ctx)=>{
+// bot.on('message', (ctx) => {
+//     const message = ctx.message.text;
+//     console.log(message);
+
+//     axios.get(`https://jsonplaceholder.typicode.com/posts/${message}`)
+//         .then((res) => {
+//             ctx.reply(res.data.title);
+//             console.log(res.data.body);
+//         });
+
+// });
+
+
+bot.on('message',(ctx) => {
     const message=ctx.message.text;
-    console.log(message);
-    axios.get(`https://jsonplaceholder.typicode.com/posts/${message}`)
-    .then((res)=>{
-        ctx.reply(res.data.title);
-        console.log(res.data.body);
+    bot.telegram.sendChatAction(ctx.chat.id,'typing').then(()=>{
+    axios.post(`http://203.217.169.102:40028/chat/completions`, {       
+        "messages": [
+            {
+                "role": "user",
+                "content": message
+            }
+        ],
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then((resp)=>{
+        ctx.reply(resp.data.choices[0].message.content); 
+        console.log(resp.data.choices[0].message.content);
     });
+   });
     
 });
 
-// bot.on('message',async(ctx)=>{ 
-//     const mydata=await axios.post('https://jsonplaceholder.typicode.com/posts',{
-//         title:ctx.message.text,
-//         body:'baree',
-//         userId:1
-//     },{
-//         headers:{
-//             'Content-Type':'application/json'
-//         }
-//     }
-//     );
-//     console.log(mydata.data.body);
 
-//     ctx.reply(`
-//     ${mydata.data.id}
-//     ${mydata.data.title}
-//     ${mydata.data.body}
-    
-//     `);
+// bot.on('message',(ctx) => {
+//     const message=ctx.message.text;
+//     axios.post(`http://203.217.169.102:40028/chat/completions`, {       
+//         "messages": [
+//             {
+//                 "role": "user",
+//                 "content": message
+//             }
+//         ],
+//     }, {
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     }).then((resp)=>{
+//         ctx.reply(resp.data.choices[0].message.content);
+//         console.log(resp.data.choices[0].message.content);
+//     });
 // });
+
+
 
 
 bot.launch();
